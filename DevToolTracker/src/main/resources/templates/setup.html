@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create admin account — DevTrack</title>
+  <link rel="stylesheet" href="/auth.css">
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <div class="brand-tag">
+    <span class="dot"></span>
+    DEVTRACK / ADMIN CONSOLE
+  </div>
+
+  <div class="form-card">
+    <h1 class="form-title">Create your admin account</h1>
+    <p class="form-subtitle">This runs once. After this account is created, this page is disabled.</p>
+
+    <form th:action="${formAction}" method="post" th:object="${registrationRequest}">
+      <div class="field-group">
+        <label class="field-label" for="name">NAME</label>
+        <input type="text" id="name" name="name" class="field-input" placeholder="Your name" th:field="*{username}" required>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="email">EMAIL</label>
+        <input type="email" id="email" name="email" class="field-input" placeholder="you@company.com" th:field="*{email}" required>
+      </div>
+
+      <th:block sec:authorize="!hasRole('ADMIN')">
+        <div class="field-group">
+          <label class="field-label" for="password">PASSWORD</label>
+          <input type="password" id="password" name="password" class="field-input" placeholder="Create a password" th:field="*{password}" required>
+        </div>
+      </th:block>
+      <button type="submit" class="submit-btn">Create account</button>
+    </form>
+  </div>
+
+  <p class="form-hint">This page only appears when no admin account exists yet.</p>
+
+</div>
+
+</body>
+</html>

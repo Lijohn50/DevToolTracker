@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${developer.username} + ' — DevTrack'">Developer — DevTrack</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell(${developer.username}, 'developers', ~{::section})}"></div>
+
+<section>
+  <div class="panel panel-padded" style="max-width: 480px;">
+    <h2 class="section-title">Developer info</h2>
+    <div class="info-row"><span class="label">Username</span><span class="value" th:text="${developer.username}">username</span></div>
+    <div class="info-row"><span class="label">Email</span><span class="value" th:text="${developer.email}">email</span></div>
+    <div class="info-row"><span class="label">Role</span><span class="value" th:text="${developer.role}">ROLE_USER</span></div>
+
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <a th:href="@{/admin/developers/{id}/edit(id=${developer.id})}" class="btn btn-secondary btn-sm">Edit</a>
+      <form th:action="@{/admin/developers/{id}/delete(id=${developer.id})}" method="post"
+            onsubmit="return confirm('Remove this developer account? This cannot be undone.');">
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </div>
+  </div>
+
+  <!--
+    Assigned-tools section will go here once the Tool and ToolAssignment
+    entities exist — same pattern as before (table of assignments +
+    a dropdown to assign a new tool), just not wired up yet.
+  -->
+</section>
+
+</body>
+</html>
