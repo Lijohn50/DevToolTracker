@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard — DevTrack</title>
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/dashboard.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell('Dashboard', 'dashboard', ~{::section})}"></div>
+
+<section>
+
+  <!-- ================= ADMIN VIEW ================= -->
+  <div th:if="${isAdmin}">
+
+    <div class="content-header">
+      <p class="subtitle">Company-wide tool spend, seat utilization, and upcoming renewals.</p>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <span class="stat-card-label">Total Tools</span>
+        <span class="stat-card-value" th:text="${stats.totalTools}">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Total Developers</span>
+        <span class="stat-card-value" th:text="${stats.totalDevelopers}">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Seat Utilization</span>
+        <span class="stat-card-value accent" th:text="${stats.overallUtilizationPercent} + '%'">0%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Inactive Seats</span>
+        <span class="stat-card-value warn" th:text="${stats.inactiveSeatsPercent} + '%'">0%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Monthly Spend</span>
+        <span class="stat-card-value" th:text="${'$' + #numbers.formatDecimal(stats.totalMonthlySpend, 1, 2)}">$0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Annual Spend</span>
+        <span class="stat-card-value" th:text="${'$' + #numbers.formatDecimal(stats.totalAnnualSpend, 1, 2)}">$0</span>
+      </div>
+    </div>
+
+    <div class="dashboard-columns">
+
+      <!-- Category spend chart -->
+      <div class="panel panel-padded">
+        <h2 class="section-title">Spend by Category</h2>
+        <div class="chart-wrap">
+          <canvas id="categorySpendChart"></canvas>
+        </div>
+        <div class="empty-state" th:if="${#maps.isEmpty(stats.categorySpend)}">No spend data yet.</div>
+      </div>
+
+      <!-- Renewals due soon -->
+      <div class="panel panel-padded">
+        <h2 class="section-title">Renewing in the Next 30 Days</h2>
+
+        <table class="data-table" th:if="${#lists.size(stats.toolsRenewingSoon) > 0}">
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Renews</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="tool : ${stats.toolsRenewingSoon}">
+              <td><a th:href="@{/tools/{id}(id=${tool.id})}" class="row-link" th:text="${tool.name}">Tool</a></td>
+              <td><span class="badge badge-trial" th:text="${#temporals.format(tool.renewalDate, 'MMM d, yyyy')}">date</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="empty-state" th:if="${#lists.size(stats.toolsRenewingSoon) == 0}">
+          Nothing renewing in the next 30 days.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Data for the chart, rendered safely via Thymeleaf's JS inlining -->
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      const categoryLabels = /*[[${stats.categorySpend.keySet()}]]*/ [];
+      const categoryValues = /*[[${stats.categorySpend.values()}]]*/ [];
+
+      if (categoryLabels.length > 0) {
+        new Chart(document.getElementById('categorySpendChart'), {
+          type: 'doughnut',
+          data: {
+            labels: categoryLabels,
+            datasets: [{
+              data: categoryValues,
+              backgroundColor: ['#4C8DFF', '#3ED598', '#F2A93B', '#E5637A', '#8993A6', '#6BA0FF', '#2E3F63'],
+              borderColor: '#131A24',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { color: '#8993A6', font: { family: 'Inter', size: 12 } }
+              }
+            }
+          }
+        });
+      }
+      /*]]>*/
+    </script>
+
+  </div>
+
+  <!-- ================= USER VIEW ================= -->
+  <div th:unless="${isAdmin}">
+
+    <div class="content-header">
+      <p class="subtitle">A quick look at your assigned tools and open requests.</p>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <span class="stat-card-label">My Tools</span>
+        <span class="stat-card-value accent" th:text="${myToolsCount}">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card-label">Pending Requests</span>
+        <span class="stat-card-value warn" th:text="${myPendingRequestsCount}">0</span>
+      </div>
+    </div>
+
+    <div class="panel panel-padded" style="margin-top: 20px;">
+      <h2 class="section-title">Getting started</h2>
+      <p class="subtitle" style="margin: 0;">
+        Your assigned tools and request history will appear here once the User section is built out.
+        In the meantime, head to <a href="/my-tools" style="color: var(--accent);">My Tools</a> or
+        <a href="/my-requests" style="color: var(--accent);">My Requests</a>.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+</body>
+</html>

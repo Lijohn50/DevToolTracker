@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${tool != null and tool.id != null} ? 'Edit Tool — DevTrack' : 'Add Tool — DevTrack'">Tool — DevTrack</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell('Tools', 'tools', ~{::section})}"></div>
+
+<section>
+
+  <div class="content-header">
+    <div>
+      <h1 class="page-title" style="font-size:19px; margin:0;"
+          th:text="${tool != null and tool.id != null} ? 'Edit Tool' : 'Add Tool'">Add Tool</h1>
+      <p class="subtitle" th:text="${tool != null and tool.id != null} ? 'Update this tool\'s details.' : 'Add a new tool or license the company pays for.'">Add a new tool.</p>
+    </div>
+  </div>
+
+  <div class="panel panel-padded">
+    <form th:action="${formAction}" th:object="${tool}" method="post" novalidate>
+
+      <div class="form-grid">
+
+        <div class="field-group">
+          <label class="field-label" for="name">TOOL NAME</label>
+          <input type="text" id="name" class="field-input" th:field="*{name}" placeholder="e.g. GitHub Copilot">
+          <div class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="vendor">VENDOR</label>
+          <input type="text" id="vendor" class="field-input" th:field="*{vendor}" placeholder="e.g. GitHub, Inc.">
+          <div class="field-error" th:if="${#fields.hasErrors('vendor')}" th:errors="*{vendor}"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="category">CATEGORY</label>
+          <select id="category" class="field-select" th:field="*{category}">
+            <option value="IDE">IDE</option>
+            <option value="CI_CD">CI/CD</option>
+            <option value="DESIGN">Design</option>
+            <option value="MONITORING">Monitoring</option>
+            <option value="PROJECT_MANAGEMENT">Project Management</option>
+            <option value="COMMUNICATION">Communication</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <div class="field-error" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="licenseType">LICENSE TYPE</label>
+          <select id="licenseType" class="field-select" th:field="*{licenseType}">
+            <option value="PAID">Paid</option>
+            <option value="FREE">Free</option>
+            <option value="TRIAL">Trial</option>
+          </select>
+          <div class="field-error" th:if="${#fields.hasErrors('licenseType')}" th:errors="*{licenseType}"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="costPerSeat">COST PER SEAT ($)</label>
+          <input type="number" step="0.01" min="0" id="costPerSeat" class="field-input" th:field="*{costPerSeat}" placeholder="0.00">
+          <div class="field-error" th:if="${#fields.hasErrors('costPerSeat')}" th:errors="*{costPerSeat}"></div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="seatsPurchased">SEATS PURCHASED</label>
+          <input type="number" min="0" id="seatsPurchased" class="field-input" th:field="*{seatsPurchased}" placeholder="0">
+          <div class="field-error" th:if="${#fields.hasErrors('seatsPurchased')}" th:errors="*{seatsPurchased}"></div>
+        </div>
+
+        <div class="field-group full">
+          <label class="field-label" for="renewalDate">RENEWAL DATE</label>
+          <input type="date" id="renewalDate" class="field-input" th:field="*{renewalDate}">
+          <div class="field-error" th:if="${#fields.hasErrors('renewalDate')}" th:errors="*{renewalDate}"></div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"
+                  th:text="${tool != null and tool.id != null} ? 'Save Changes' : 'Add Tool'">Add Tool</button>
+          <a th:href="@{/tools}" class="btn btn-secondary">Cancel</a>
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+
+</section>
+
+</body>
+</html>

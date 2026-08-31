@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Tools — DevTrack</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell('Tools', 'tools', ~{::section})}"></div>
+
+<section>
+
+  <div class="content-header">
+    <div>
+      <p class="subtitle">Every tool and license the company pays for.</p>
+    </div>
+    <a th:href="@{/tools/new}" class="btn btn-primary">+ Add Tool</a>
+  </div>
+
+  <table class="data-table" th:if="${#lists.size(tools) > 0}">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Category</th>
+        <th>License</th>
+        <th>Cost / Seat</th>
+        <th>Seats Used</th>
+        <th>Renews</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="tool : ${tools}">
+        <td>
+          <a th:href="@{/tools/{id}(id=${tool.id})}" class="row-link" th:text="${tool.name}">Tool</a>
+        </td>
+        <td th:text="${tool.category}">Category</td>
+        <td>
+          <span class="badge"
+                th:classappend="${tool.licenseType == 'PAID'} ? 'badge-paid' : (${tool.licenseType == 'TRIAL'} ? 'badge-trial' : 'badge-free')"
+                th:text="${tool.licenseType}">PAID</span>
+        </td>
+        <td th:text="${'$' + #numbers.formatDecimal(tool.costPerSeat, 1, 2)}">$0.00</td>
+        <td>
+          <!--<span th:text="${tool.seatsUsed} + ' / ' + ${tool.seatsPurchased}">0 / 0</span>-->
+        </td>
+        <td>
+          <span class="badge badge-trial" th:text="${#temporals.format(tool.renewalDate, 'MMM d, yyyy')}">date</span>
+        </td>
+        <td>
+          <div class="row-actions">
+            <a th:href="@{/tools/{id}/edit(id=${tool.id})}" class="btn btn-secondary btn-sm">Edit</a>
+            <form th:action="@{/tools/{id}/delete(id=${tool.id})}" method="post"
+                  onsubmit="return confirm('Delete this tool? This cannot be undone.');">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="panel empty-state" th:if="${#lists.size(tools) == 0}">
+    No tools have been added yet.
+  </div>
+
+</section>
+
+</body>
+</html>
