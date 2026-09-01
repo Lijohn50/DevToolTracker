@@ -33,7 +33,7 @@
     <tbody>
       <tr th:each="tool : ${tools}">
         <td>
-          <a th:href="@{/tools/{id}(id=${tool.id})}" class="row-link" th:text="${tool.name}">Tool</a>
+          <a th:href="@{/admin/tool-details/{id}(id=${tool.id})}" class="row-link" th:text="${tool.name}">Tool</a>
         </td>
         <td th:text="${tool.category}">Category</td>
         <td>
@@ -50,8 +50,8 @@
         </td>
         <td>
           <div class="row-actions">
-            <a th:href="@{/tools/{id}/edit(id=${tool.id})}" class="btn btn-secondary btn-sm">Edit</a>
-            <form th:action="@{/tools/{id}/delete(id=${tool.id})}" method="post"
+            <a th:href="@{/admin/tools/{id}/edit(id=${tool.id})}" class="btn btn-secondary btn-sm">Edit</a>
+            <form th:action="@{/admin/tools/{id}/delete(id=${tool.id})}" method="post"
                   onsubmit="return confirm('Delete this tool? This cannot be undone.');">
               <button type="submit" class="btn btn-danger btn-sm">Delete</button>
             </form>

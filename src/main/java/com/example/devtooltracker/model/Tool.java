@@ -49,6 +49,7 @@ public class Tool {
         @NotNull(message = "Renewal date is required")
         private LocalDate renewalDate;
 
-        @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL, orphanRemoval = true)
+        @OneToMany(mappedBy = "tool", cascade = CascadeType.ALL)
         private List<Assignment> assignments = new ArrayList<>();
+
 }

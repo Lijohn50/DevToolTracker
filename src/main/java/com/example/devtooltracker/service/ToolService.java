@@ -19,10 +19,18 @@ public class ToolService {
     }
     public void deleteTool(int id){
 
-
+        toolRepository.deleteById(id);
     }
     public List<Tool> findAll(){
 
         return toolRepository.findAll();
+    }
+    public Tool findById(int id){
+
+        return toolRepository.findById(id).orElse(null);
+    }
+    public void updateTool(Tool tool){
+
+        toolRepository.save(tool);
     }
 }

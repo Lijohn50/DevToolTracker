@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.engine.internal.Cascade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,4 +29,7 @@ public class User {
     @NotBlank(message = "Password cannot be empty")
     private String password;
     private String role;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Assignment> assignments = new ArrayList<>();
+
 }

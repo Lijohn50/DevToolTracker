@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${developer.username} + ' — DevTrack'">Developer — DevTrack</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell(${developer.username}, 'developers', ~{::section})}"></div>
+
+<section>
+  <div class="alert-banner" th:if="${assignmentError}" th:text="${assignmentError}"></div>
+
+  <div class="detail-grid">
+
+    <!-- Left: developer info -->
+    <div class="panel panel-padded">
+      <h2 class="section-title">Developer info</h2>
+      <div class="info-row"><span class="label">Email</span><span class="value" th:text="${developer.email}">email</span></div>
+      <div class="info-row"><span class="label">Tools assigned</span><span class="value" th:text="${#lists.size(assignments)}">0</span></div>
+
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <a th:href="@{/admin/user-list/{id}/edit(id=${developer.id})}" class="btn btn-secondary btn-sm">Edit</a>
+        <form th:action="@{/admin/user-list/{id}/delete(id=${developer.id})}"
+              onsubmit="return confirm('Remove this developer? This also removes their tool assignments.');">
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right: assigned tools + assign form -->
+    <div class="panel panel-padded">
+      <h2 class="section-title">Assigned tools</h2>
+
+      <table class="data-table" th:if="${#lists.size(assignments) > 0}">
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>Status</th>
+            <th>Assigned</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="a : ${assignments}">
+            <td><a th:href="@{/tools/{id}(id=${a.tool.id})}" class="row-link" th:text="${a.tool.name}">Tool</a></td>
+            <td th:text="${#temporals.format(a.startDate, 'MMM d, yyyy')}">date</td>
+            <td>
+              <form th:action="@{/assignments/{id}/unassign(id=${a.id})}" method="post">
+                <input type="hidden" name="returnTo" th:value="@{/developers/{id}(id=${developer.id})}">
+                <button type="submit" class="btn btn-danger btn-sm">Unassign</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty-state" th:if="${#lists.size(assignments) == 0}">No tools assigned yet.</div>
+
+      <!--<form th:action="@{/assignments}" th:object="${assignmentRequest}" method="post" class="assign-form">
+        <input type="hidden" th:field="*{developerId}" th:value="${developer.id}">
+        <input type="hidden" name="returnTo" th:value="@{/developers/{id}(id=${developer.id})}">
+
+        <div class="field-group">
+          <label class="field-label" for="toolId">ASSIGN A TOOL</label>
+          <select id="toolId" class="field-select" th:field="*{toolId}">
+            <option value="" disabled selected>Choose a tool&hellip;</option>
+            <option th:each="t : ${allTools}" th:value="${t.id}" th:text="${t.name}">Tool name</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Assign</button>
+      </form>-->
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>

@@ -25,7 +25,7 @@
     </thead>
     <tbody>
     <tr th:each="dev : ${developers}">
-      <td th:text="${dev.username}"></td>
+      <td><a th:href="@{/admin/user-details/{id}(id=${dev.id})}" class="row-link" th:text="${dev.username}">username</a></td>
       <td th:text="${dev.email}"></td>
       <td>
         <div class="row-actions">

@@ -5,10 +5,7 @@ import com.example.devtooltracker.service.ToolService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,5 +32,25 @@ public class ToolController {
 
         toolService.addTool(tool);
         return "redirect:/admin/add-tools";
+    }
+
+    @GetMapping("/tools/{id}/edit")
+    public String toolDetails(Model model, @PathVariable int id) {
+
+        model.addAttribute("tool", toolService.findById(id));
+        return "toolForm";
+    }
+    @PostMapping("/tools/{id}/edit")
+    public String editTool(@ModelAttribute Tool tool, @PathVariable int id) {
+
+        toolService.updateTool(tool);
+        return "redirect:/admin/tools-list";
+    }
+    @GetMapping("/tools/{id}/delete")
+    public String deleteTool(Model model, @PathVariable int id) {
+
+        model.addAttribute("tool", new Tool());
+        toolService.deleteTool(id);
+        return "redirect:/admin/tools-list";
     }
 }

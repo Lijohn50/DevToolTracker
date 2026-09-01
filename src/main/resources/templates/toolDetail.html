@@ -99,12 +99,12 @@
         No developers are assigned to this tool yet.
       </div>
 
-      <form th:action="@{/tools/{id}/assign(id=${tool.id})}" method="post" class="assign-form">
+      <form th:action="@{/admin/tools/{id}/assign(id=${tool.id})}" method="post" class="assign-form">
         <div class="field-group">
           <label class="field-label" for="developerId">ASSIGN DEVELOPER</label>
           <select id="developerId" name="developerId" class="field-select">
             <option value="" disabled selected>Select a developer&hellip;</option>
-            <option th:each="dev : ${unassignedDevelopers}"
+            <option th:each="dev : ${tool.unassignedDevelopers()}"
                     th:value="${dev.id}"
                     th:text="${dev.username} + ' (' + ${dev.email} + ')'">Developer</option>
           </select>
