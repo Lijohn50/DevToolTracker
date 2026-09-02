@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Request a Tool — DevTrack</title>
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/user.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell('Request a Tool', 'my-tools', ~{::section})}"></div>
+
+<section>
+ <div class="form-page-center">
+  <div class="panel panel-padded" style="max-width: 520px; width: 100%;">
+    <h2 class="section-title">Request access to a tool</h2>
+    <p class="subtitle" style="margin: 0 0 20px;">Your admin will review this and approve or reject it.</p>
+
+    <div class="alert-banner" th:if="${requestError}" th:text="${requestError}"></div>
+
+    <form th:action="@{/user/request-tool}" method="post">
+      <div class="form-grid">
+        <div class="field-group full">
+          <label class="field-label" for="toolId">TOOL</label>
+          <select id="toolId" name="toolId" class="field-select">
+            <option value="" disabled selected>Choose a tool&hellip;</option>
+            <option th:each="tool : ${availableTools}" th:value="${tool.id}" th:text="${tool.name}">Tool name</option>
+          </select>
+        </div>
+
+        <div class="field-group full">
+          <label class="field-label" for="note">NOTE (OPTIONAL)</label>
+          <textarea id="note" name="note" class="field-input" rows="4" placeholder="Why do you need this tool?"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Submit Request</button>
+          <a href="/user/my-tools" class="btn btn-secondary">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+ </div>
+</section>
+
+</body>
+</html>

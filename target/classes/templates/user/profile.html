@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile — DevTrack</title>
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/user.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell('Profile', 'profile', ~{::section})}"></div>
+
+<section>
+  <div class="alert-banner" th:if="${profileError}" th:text="${profileError}"></div>
+  <div class="alert-banner" style="border-color: var(--status-ok); color: #9FEBC7; background: transparent;" th:if="${profileSuccess}" th:text="${profileSuccess}"></div>
+
+  <div class="detail-grid">
+
+    <!-- Left: update basic info -->
+    <div class="panel panel-padded">
+      <h2 class="section-title">Account info</h2>
+      <form th:action="@{/user/profile}" th:object="${user}" method="post" novalidate>
+
+        <!-- preserve fields not shown on this form -->
+        <input type="hidden" th:field="*{password}">
+        <input type="hidden" th:field="*{role}">
+
+        <div class="field-group" style="margin-bottom: 16px;">
+          <label class="field-label" for="username">USERNAME</label>
+          <input type="text" id="username" class="field-input" th:field="*{username}">
+          <div class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        </div>
+
+        <div class="field-group" style="margin-bottom: 16px;">
+          <label class="field-label" for="email">EMAIL</label>
+          <input type="email" id="email" class="field-input" th:field="*{email}">
+          <div class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+    </div>
+
+    <!-- Right: change password -->
+    <div class="panel panel-padded">
+      <h2 class="section-title">Change password</h2>
+      <form th:action="@{/user/profile/password}" method="post">
+
+        <div class="field-group" style="margin-bottom: 16px;">
+          <label class="field-label" for="currentPassword">CURRENT PASSWORD</label>
+          <input type="password" id="currentPassword" name="currentPassword" class="field-input">
+        </div>
+
+        <div class="field-group" style="margin-bottom: 16px;">
+          <label class="field-label" for="newPassword">NEW PASSWORD</label>
+          <input type="password" id="newPassword" name="newPassword" class="field-input">
+        </div>
+
+        <div class="field-group" style="margin-bottom: 16px;">
+          <label class="field-label" for="confirmPassword">CONFIRM NEW PASSWORD</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" class="field-input">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Password</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>

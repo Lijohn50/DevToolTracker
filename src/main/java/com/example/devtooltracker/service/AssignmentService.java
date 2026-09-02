@@ -30,4 +30,8 @@ public class AssignmentService {
 
         return assignmentRepository.findAllByUserId(id);
     }
+    public void unassignTool(int id){
+
+        assignmentRepository.deleteById(id);
+    }
 }

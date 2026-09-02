@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard — DevTrack</title>
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/user.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell('Dashboard', 'dashboard', ~{::section})}"></div>
+
+<section>
+  <div class="content-header">
+    <div>
+      <p class="subtitle">A quick look at your assigned tools and open requests.</p>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span class="stat-card-label">My Tools</span>
+      <span class="stat-card-value accent" th:text="${assignedToolsCount}">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card-label">Pending Requests</span>
+      <span class="stat-card-value warn" th:text="${pendingRequestsCount}">0</span>
+    </div>
+  </div>
+
+  <div class="panel panel-padded">
+    <h2 class="section-title">Recently Assigned Tools</h2>
+
+    <table class="data-table" th:if="${#lists.size(assignedTools) > 0}">
+      <thead>
+        <tr>
+          <th>Tool</th>
+          <th>Category</th>
+          <th>Renews</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="a : ${assignedTools}">
+          <td th:text="${a.tool.name}">Tool</td>
+          <td th:text="${a.tool.category}">Category</td>
+          <td th:text="${#temporals.format(a.tool.renewalDate, 'MMM d, yyyy')}">date</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty-state" th:if="${#lists.size(assignedTools) == 0}">
+      You don't have any tools assigned yet.
+    </div>
+
+    <div class="quick-links">
+      <a href="/user/my-tools" class="btn btn-secondary btn-sm">View My Tools</a>
+      <a href="/user/request-tool" class="btn btn-primary btn-sm">Request a Tool</a>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

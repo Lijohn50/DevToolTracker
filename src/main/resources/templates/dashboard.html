@@ -126,23 +126,31 @@
     </div>
 
     <div class="stat-grid">
+
       <div class="stat-card">
         <span class="stat-card-label">My Tools</span>
-        <span class="stat-card-value accent" th:text="${myToolsCount}">0</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-card-label">Pending Requests</span>
-        <span class="stat-card-value warn" th:text="${myPendingRequestsCount}">0</span>
-      </div>
-    </div>
 
-    <div class="panel panel-padded" style="margin-top: 20px;">
-      <h2 class="section-title">Getting started</h2>
-      <p class="subtitle" style="margin: 0;">
-        Your assigned tools and request history will appear here once the User section is built out.
-        In the meantime, head to <a href="/my-tools" style="color: var(--accent);">My Tools</a> or
-        <a href="/my-requests" style="color: var(--accent);">My Requests</a>.
-      </p>
+        <span class="stat-card-value accent"
+              th:text="${myToolsCount}">
+            0
+        </span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-card-label">Next Renewal</span>
+
+        <span class="stat-card-value"
+              th:if="${nextRenewal != null}"
+              th:text="${#temporals.format(nextRenewal, 'MMM d, yyyy')}">
+            date
+        </span>
+
+        <span class="stat-card-value"
+              th:if="${nextRenewal == null}">
+            None
+        </span>
+      </div>
+
     </div>
 
   </div>

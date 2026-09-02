@@ -86,7 +86,7 @@
             <td th:text="${dev.email}">email</td>
             <td>
               <div class="row-actions">
-                <form th:action="@{/tools/{toolId}/unassign/{devId}(toolId=${tool.id}, devId=${dev.id})}" method="post">
+                <form th:action="@{/admin/tool-details/{toolId}/unassign/{devId}(toolId=${tool.id}, devId=${dev.id})}">
                   <button type="submit" class="btn btn-danger btn-sm">Unassign</button>
                 </form>
               </div>

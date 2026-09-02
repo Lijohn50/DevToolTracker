@@ -47,9 +47,8 @@
             <td><a th:href="@{/tools/{id}(id=${a.tool.id})}" class="row-link" th:text="${a.tool.name}">Tool</a></td>
             <td th:text="${#temporals.format(a.startDate, 'MMM d, yyyy')}">date</td>
             <td>
-              <form th:action="@{/assignments/{id}/unassign(id=${a.id})}" method="post">
+              <form th:action="@{/admin/user-details/{id}/unassign(id=${a.id})}">
                 <input type="hidden" name="returnTo" th:value="@{/developers/{id}(id=${developer.id})}">
-                <button type="submit" class="btn btn-danger btn-sm">Unassign</button>
               </form>
             </td>
           </tr>

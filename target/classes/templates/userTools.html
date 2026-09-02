@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>My Tools — DevTrack</title>
+  <link rel="stylesheet" href="/app.css">
+  <link rel="stylesheet" href="/user.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/layout :: shell('My Tools', 'my-tools', ~{::section})}"></div>
+
+<section>
+  <div class="content-header">
+    <div>
+      <p class="subtitle">Every tool currently assigned to you.</p>
+    </div>
+    <a href="/user/request-tool" class="btn btn-primary">+ Request a Tool</a>
+  </div>
+
+  <table class="data-table" th:if="${#lists.size(assignedTools) > 0}">
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Category</th>
+        <th>License</th>
+        <th>Vendor</th>
+        <th>Renews</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="a : ${assignedTools}">
+        <td th:text="${a.tool.name}">Tool</td>
+        <td th:text="${a.tool.category}">Category</td>
+        <td>
+          <span class="badge"
+                th:classappend="${a.tool.licenseType.name() == 'PAID'} ? 'badge-paid' : (${a.tool.licenseType.name() == 'FREE'} ? 'badge-free' : 'badge-trial')"
+                th:text="${a.tool.licenseType}">PAID</span>
+        </td>
+        <td th:text="${a.tool.vendor}">Vendor</td>
+        <td th:text="${#temporals.format(a.tool.renewalDate, 'MMM d, yyyy')}">date</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="panel empty-state" th:if="${#lists.size(assignedTools) == 0}">
+    You don't have any tools assigned yet. <a href="/user/request-tool" style="color: var(--accent);">Request one</a>.
+  </div>
+</section>
+
+</body>
+</html>

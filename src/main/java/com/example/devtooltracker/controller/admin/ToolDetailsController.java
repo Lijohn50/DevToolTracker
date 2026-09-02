@@ -22,4 +22,10 @@ public class ToolDetailsController {
         model.addAttribute("tool", toolDetailsService.getToolDetails(id));
         return "toolDetail";
     }
+    @GetMapping("/tool-details/{toolId}/unassign/{devId}")
+    public String toolList(Model model, @PathVariable int toolId, @PathVariable int devId) {
+
+        toolDetailsService.unassignUser(toolId, devId);
+        return "redirect:/admin/tool-details/" + toolId;
+    }
 }

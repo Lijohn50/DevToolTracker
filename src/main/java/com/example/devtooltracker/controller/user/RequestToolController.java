@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
-public class UserDashboard {
+public class RequestToolController {
 
-    @GetMapping("/dashboard")
-    public String userDashboard() {
-        return "userDashboard";
+    @GetMapping("/request-tool")
+    public String requestTool() {
+
+        return "comingSoon";
     }
 }

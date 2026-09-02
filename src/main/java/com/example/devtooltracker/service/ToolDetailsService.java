@@ -4,8 +4,10 @@ import com.example.devtooltracker.dto.ToolDetail;
 import com.example.devtooltracker.model.Assignment;
 import com.example.devtooltracker.model.Tool;
 import com.example.devtooltracker.model.User;
+import com.example.devtooltracker.repository.AssignmentRepository;
 import com.example.devtooltracker.repository.ToolRepository;
 import com.example.devtooltracker.repository.UserListRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class ToolDetailsService {
 
     private final ToolRepository toolRepository;
     private final UserListRepository userListRepository;
+    private final AssignmentRepository assignmentRepository;
 
     public ToolDetail getToolDetails(int id){
 
@@ -42,5 +45,10 @@ public class ToolDetailsService {
                 ,utilizationPercent
                 ,assignedDevelopers
                 ,unassignedDevelopers);
+    }
+    @Transactional
+    public void unassignUser(int toolId, int devId){
+
+        assignmentRepository.deleteByUserIdAndToolId(devId, toolId);
     }
 }
